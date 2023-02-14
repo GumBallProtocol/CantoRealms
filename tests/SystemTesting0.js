@@ -661,6 +661,12 @@ describe("SystemTesting0", function () {
         await FORNI.getFactory();
         await FORNI.floorPrice();
         await FORNI.borrowCredit(user2.address);
+        await expect(FORNI.connect(user1).borrowSome(0)).to.be.revertedWith("!Zero");
+        await expect(FORNI.connect(user1).borrowSome(oneThousand)).to.be.revertedWith("Borrow Underflow");
+        await expect(FORNI.connect(user1).repaySome(0)).to.be.revertedWith("!Zero");
+        await expect(FORNI.connect(user1).updateAllowlist([user1.address], ten)).to.be.revertedWith("!AUTH");
+        await expect(FORNI.connect(user1).setAffiliate([user1.address], true)).to.be.revertedWith("!AUTH");
+        await expect(FORNI.connect(user1).setXGBT(user1.address)).to.be.reverted;
     });
 
     it('Artist sets new artist', async function () {
@@ -706,6 +712,8 @@ describe("SystemTesting0", function () {
         await expect(factory.connect(user2).addReward(XFORNI.address, NOTE.address)).to.be.reverted;
         await factory.connect(owner).addReward(XFORNI.address, LP_CANTO_NOTE.address);
         await factory.totalDeployed();
+        await expect(gbtFactory.connect(user1).createGBT("test", "test", WCANTO.address, oneHundred, oneHundred, user1.address, factory.address, 3600)).to.be.reverted;
+        await expect(xgbtFactory.connect(user1).createXGBT(user1.address, WCANTO.address, FORNI_NFT.address)).to.be.reverted;
     });
 
     it('CTokenPlugin Coverage Testing', async function () {

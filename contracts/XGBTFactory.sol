@@ -2,7 +2,6 @@
 pragma solidity ^0.8.11;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
@@ -51,12 +50,7 @@ contract XGBT is ReentrancyGuard {
 
     /* ========== CONSTRUCTOR ========== */
 
-    constructor(
-        address _factory,
-        address _stakingToken,
-        address _stakingNFT
-    ) {
-        require(_factory != address(0), "!0");
+    constructor(address _factory, address _stakingToken, address _stakingNFT) {
         factory = _factory;
         stakingToken = IERC20(_stakingToken);
         stakingNFT = IERC721(_stakingNFT);
@@ -261,11 +255,6 @@ contract XGBT is ReentrancyGuard {
                 userRewardPerTokenPaid[account][token] = rewardData[token].rewardPerTokenStored;
             }
         }
-        _;
-    }
-
-    modifier OnlyFactory() {
-        require(msg.sender == factory, "!AUTH");
         _;
     }
 

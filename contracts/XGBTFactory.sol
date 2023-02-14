@@ -196,7 +196,6 @@ contract XGBT is ReentrancyGuard {
     /* ========== RESTRICTED FUNCTIONS ========== */
 
     function notifyRewardAmount(address _rewardsToken, uint256 reward) external updateReward(address(0)) {
-        require(reward > DURATION);
         // handle the transfer of reward tokens via `transferFrom` to reduce the number
         // of transactions required and ensure correctness of the reward amount
         IERC20(_rewardsToken).safeTransferFrom(msg.sender, address(this), reward);
@@ -206,7 +205,6 @@ contract XGBT is ReentrancyGuard {
         } else {
             uint256 remaining = rewardData[_rewardsToken].periodFinish - block.timestamp;
             uint256 leftover = remaining * rewardData[_rewardsToken].rewardRate;
-            require(reward > leftover, "reward amount should be greater than leftover amount"); // to stop griefing attack
             rewardData[_rewardsToken].rewardRate = (reward + leftover) / DURATION;
         }
 

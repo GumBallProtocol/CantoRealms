@@ -42,7 +42,7 @@ interface IGBT {
 }
 
 interface IXGBT {
-    function addReward(address _rewardsToken, address _rewardsDistributor) external;
+    function addReward(address _rewardsToken) external;
     function setRewardsDistributor(address _rewardsToken, address _rewardsDistributor) external;
 }
 
@@ -112,8 +112,8 @@ contract GumBallFactory is Ownable {
         address xgbt = IXGBTFactory(XGBTFactory).createXGBT(address(this), gbt, gnft);
         
         IGBT(gbt).setXGBT(xgbt);
-        IXGBT(xgbt).addReward(gbt, IGBT(gbt).getFees());
-        IXGBT(xgbt).addReward(_base, IGBT(gbt).getFees());
+        IXGBT(xgbt).addReward(gbt);
+        IXGBT(xgbt).addReward(_base);
 
         bool allow;
         if (allowlist[msg.sender]) {
@@ -166,7 +166,7 @@ contract GumBallFactory is Ownable {
         IGBT(_tokenAddr).updateAllowlist(_accounts, _amount);
     }
 
-    function updateGumBallAffiliate(address _tokenAdr, address[] calldata _accounts, bool _flag) external onlyOwner {
+    function updateGumBallAffiliate(address _tokenAddr, address[] calldata _accounts, bool _flag) external onlyOwner {
         IGBT(_tokenAddr).setAffiliate(_accounts, _flag);
     }
 

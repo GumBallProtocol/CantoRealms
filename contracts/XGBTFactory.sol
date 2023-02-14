@@ -11,6 +11,7 @@ import "@openzeppelin/contracts/utils/math/Math.sol";
 
 interface IGBT {
     function mustStayGBT(address account) external view returns (uint256);
+    function getArtist() external view returns (address);
 }
 
 contract XGBT is ReentrancyGuard {
@@ -62,7 +63,7 @@ contract XGBT is ReentrancyGuard {
     }
 
     function addReward(address _rewardsToken) external {
-        require(msg.sender == factory || msg.sender == artist, "!AUTH"); // need to pass in artist for this to work
+        require(msg.sender == factory || msg.sender == IGBT(address(stakingToken)).getArtist(), "!AUTH");
         require(!isRewardToken[_rewardsToken], "Reward token already exists");
         rewardTokens.push(_rewardsToken);
         isRewardToken[_rewardsToken] = true;
@@ -278,7 +279,7 @@ contract XGBT is ReentrancyGuard {
     event DepositNFT(address indexed user, address colleciton, uint256[] id);
     event WithdrawNFT(address indexed user, address collection, uint256[] id);
     event RewardPaid(address indexed user, address indexed rewardsToken, uint256 reward);
-    event RewardAdded(address reward, address distributor);
+    event RewardAdded(address reward);
     event DistributorSet(address reward, address distributor);
 }
 

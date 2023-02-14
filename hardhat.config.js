@@ -1,69 +1,27 @@
 require("@nomiclabs/hardhat-waffle");
-require('solidity-coverage')
+require("solidity-coverage");
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
+
 module.exports = {
   solidity: {
-    compilers: [
-      {
-        version: '0.8.11'
-      },
-      {
-        version: '0.8.13'
-      }
-    ],
+    version: "0.8.17",
     settings: {
       optimizer: {
         enabled: true,
-        runs: 1000,
+        runs: 200,
       },
     },
-    overrides: {
-      "contracts/GNFTFactory.sol": {
-        version: "0.8.13",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
-        }
-      },
-      "contracts/GBTFactory.sol": {
-        version: "0.8.13",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
-        }
-      },
-      "contracts/XGBTFactory.sol": {
-        version: "0.8.13",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
-        }
-      },
-      "contracts/GumBallFactory.sol": {
-        version: "0.8.13",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
-        }
-      },
-    }
   },
   networks: {
-    localhost: {
-      url: "http://127.0.0.1:8545"
-    },
-    hardhat: {      
+    hardhat: {
+      chainId: 7700,
+      forking: {
+        url: "https://mainnode.plexnode.org:8545",
+        blockNumber: 2930000,
+      },
     },
   },
   paths: {

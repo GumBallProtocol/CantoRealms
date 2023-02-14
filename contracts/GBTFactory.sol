@@ -117,7 +117,7 @@ contract GBT is ERC20, ReentrancyGuard {
     event AllowListUpdated(address[] accounts, uint256 amount);
     event XGBTSet(address indexed _XGBT);
     event ChangeArtist(address newArtist);
-    event AffiliateSet(address indexed affiliate, bool flag);
+    event AffiliateSet(address[] indexed affiliate, bool flag);
 
     constructor(
         string memory _name,

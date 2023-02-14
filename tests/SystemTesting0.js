@@ -83,7 +83,10 @@ describe("SystemTesting0", function () {
         console.log("- LP-CANTO/NOTE Initialized");
 
         // cLP-CANTO/NOTE
-        cLP_CANTO_NOTE = await ethers.getContractAt("ERC20Mock", cLP_CANTO_NOTE_addr);
+        response = await axios.get(cLP_CANTO_NOTE_url);
+        const cLP_CANTO_NOTE_abi = JSON.parse(response.data.result);
+        cLP_CANTO_NOTE = new ethers.Contract(cLP_CANTO_NOTE_addr, cLP_CANTO_NOTE_abi, provider);
+        timer(1000);
         console.log("- cLP-CANTO/NOTE Initialized");
 
         // Gummi CLP
@@ -137,6 +140,29 @@ describe("SystemTesting0", function () {
         console.log("******************************************************");
     });
 
+    it("User1 trades 1000 CANTO for NOTE", async function () {
+        console.log("******************************************************");
+        await router.connect(user1).swapExactCANTOForTokens(1, [[WCANTO.address, NOTE.address, false]], user1.address, 1975818632, {value: oneThousand,});
+    });
+
+    it("User1 adds liquidity on LP-CANTO/NOTE", async function () {
+        console.log("******************************************************");
+        await NOTE.connect(user1).approve(router.address, oneThousand);
+        await router.connect(user1).addLiquidityCANTO(NOTE.address, false, oneThousand, 1, 1, user1.address, 1975818632, {value: oneThousand,});
+    });
+
+    it("User1 deposits LP-CANTO/NOTE in lending market", async function () {
+        console.log("******************************************************");
+        await LP_CANTO_NOTE.connect(user1).approve(cLP_CANTO_NOTE.address, fiveHundred);
+        await cLP_CANTO_NOTE.connect(user1).mint(fiveHundred);
+    });
+
+    it("User1 deposits cLP-CANTO/NOTE in CTokenPlugin", async function () {
+        console.log("******************************************************");
+        await cLP_CANTO_NOTE.connect(user1).approve(gummiCLP.address, fiveHundred);
+        await gummiCLP.connect(user1).depositFor(user1.address, fiveHundred);
+    });
+
     it('System Status', async function () {
         console.log("******************************************************");
 
@@ -169,6 +195,9 @@ describe("SystemTesting0", function () {
         let protocolGCLP = await gummiCLP.balanceOf(protocol.address);
 
         let user1WCANTO = await WCANTO.connect(user1).balanceOf(user1.address);
+        let user1NOTE = await NOTE.connect(user1).balanceOf(user1.address);
+        let user1LP = await LP_CANTO_NOTE.connect(user1).balanceOf(user1.address);
+        let user1CLP = await cLP_CANTO_NOTE.connect(user1).balanceOf(user1.address);
         let user1GCLP = await gummiCLP.balanceOf(user1.address);
         let user1FORNI = await FORNI.balanceOf(user1.address);
         let user1GNFT = await FORNI_NFT.balanceOf(user1.address);
@@ -180,6 +209,9 @@ describe("SystemTesting0", function () {
         let user1MustStayFORNI = await FORNI.mustStayGBT(user1.address);
 
         let user2WCANTO = await WCANTO.connect(user2).balanceOf(user2.address);
+        let user2NOTE = await NOTE.connect(user2).balanceOf(user2.address);
+        let user2LP = await LP_CANTO_NOTE.connect(user2).balanceOf(user2.address);
+        let user2CLP = await cLP_CANTO_NOTE.connect(user2).balanceOf(user2.address);
         let user2GCLP = await gummiCLP.balanceOf(user2.address);
         let user2FORNI = await FORNI.balanceOf(user2.address);
         let user2GNFT = await FORNI_NFT.balanceOf(user2.address);
@@ -191,6 +223,9 @@ describe("SystemTesting0", function () {
         let user2MustStayFORNI = await FORNI.mustStayGBT(user2.address);
 
         let user3WCANTO = await WCANTO.connect(user3).balanceOf(user3.address);
+        let user3NOTE = await NOTE.connect(user3).balanceOf(user3.address);
+        let user3LP = await LP_CANTO_NOTE.connect(user3).balanceOf(user3.address);
+        let user3CLP = await cLP_CANTO_NOTE.connect(user3).balanceOf(user3.address);
         let user3GCLP = await gummiCLP.balanceOf(user3.address);
         let user3FORNI = await FORNI.balanceOf(user3.address);
         let user3GNFT = await FORNI_NFT.balanceOf(user3.address);
@@ -211,7 +246,7 @@ describe("SystemTesting0", function () {
         console.log("FORNI Total Supply", divDec(totalSupplyFORNI));
         console.log();
 
-        console.log("GUMMI GLP");
+        console.log("GUMMI CLP");
         console.log('cLP-CANTO/NOTE', divDec(gclpCLP));
         console.log('WCANTO Earned', divDec(earnedWCANTO));
         console.log('gummiCLP Supply', divDec(gummiCLPSupply));
@@ -248,6 +283,9 @@ describe("SystemTesting0", function () {
 
         console.log("USER1 BALANCES");
         console.log("WCANTO", divDec(user1WCANTO));
+        console.log("NOTE", divDec(user1NOTE));
+        console.log("LP", divDec(user1LP));
+        console.log("CLP", divDec(user1CLP));
         console.log("GCLP", divDec(user1GCLP));
         console.log("FORNI", divDec(user1FORNI));
         console.log("GNFT", divDec(user1GNFT));
@@ -261,6 +299,9 @@ describe("SystemTesting0", function () {
 
         console.log("USER2 BALANCES");
         console.log("WCANTO", divDec(user2WCANTO));
+        console.log("NOTE", divDec(user2NOTE));
+        console.log("LP", divDec(user2LP));
+        console.log("CLP", divDec(user2CLP));
         console.log("GCLP", divDec(user2GCLP));
         console.log("FORNI", divDec(user2FORNI));
         console.log("GNFT", divDec(user2GNFT));
@@ -274,6 +315,9 @@ describe("SystemTesting0", function () {
 
         console.log("USER3 BALANCES");
         console.log("WCANTO", divDec(user3WCANTO));
+        console.log("NOTE", divDec(user3NOTE));
+        console.log("LP", divDec(user3LP));
+        console.log("CLP", divDec(user3CLP));
         console.log("GCLP", divDec(user3GCLP));
         console.log("FORNI", divDec(user3FORNI));
         console.log("GNFT", divDec(user3GNFT));

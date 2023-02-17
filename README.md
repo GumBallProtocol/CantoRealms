@@ -1,4 +1,5 @@
-# gumball-coh
+# Canto Realms
+
 GumBall Protocol is a digital asset creation system that ensures liquidity for NFTs created on the platform, making them easily tradable and giving users an NFT trading experience similar to that of Uniswap. The system utilizes the GumBall bonding curve, which allows users to instantly buy, sell, and stake NFTs, earning yield from swap fees generated on the bonding curve. Additionally, the system enables users to borrow liquidity against their NFTs without the risk of liquidation or interest. The bonding curve ensures that every NFT is backed by liquidity in the form of an ERC20, such as $WETH, $WBTC, or $CANTO.
 
 For our upcoming Canto premiere, we have partnered with the super artist XWAVE to bring you a delightfully trippy and unique collection. These diffused realms will be minted as NFTs backed by $CANTO-$NOTE LPs, allowing holders to earn yield from both the NFT and the underlying LPs. Realm owners will earn CANTO from the cLP-CANTO/NOTE farm at yields >250% APR while being able to borrow against their land with no risk of liquidation. These realms not only depict the land of Canto but also earn from it, attracting NFT pioneers and degens alike who can enjoy the prosperity Canto has to offer.
